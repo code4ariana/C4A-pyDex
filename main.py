@@ -1,51 +1,62 @@
 import requests
+import random
+
+random.random()
 
 # pokemon API base url
 base_url = "https://pokeapi.co/api/v2/"
 
+
 def menu():
-  print("------------------------")
-  print("\n Welcome to the pyDex\n")
-  print("(1) Search for a Pokemon\n")
-  print("(2) Assemble Party\n")
-  print("(3) Surprise me!\n")
-  print("------------------------")
+    print("------------------------")
+    print("\n Welcome to the pyDex\n")
+    print("(1) Search for a Pokemon\n")
+    print("(2) Assemble Party\n")
+    print("(3) Surprise me!\n")
+    print("------------------------")
+
 
 pokemon_party = []
 pokemon_party_size = 6
 
+
 def main():
-  menu()
-  menu_selection = int(input("To access - Select from 1 to 3: "))
+    menu()
+    menu_selection = int(input("To access - Select from 1 to 3: "))
 
-
-  if menu_selection == 1:
-    search()
-  elif menu_selection == 2:
-    party()
-  elif menu_selection == 3:
-    surprise()
-  else:
-    return
-
+    if menu_selection == 1:
+        search()
+    elif menu_selection == 2:
+        party()
+    elif menu_selection == 3:
+        surprise()
+    else:
+        print("Entry is not valid.")
+        return
 
 
 def party():
     for poke in range(7):
-        pokemon_entry: str = input("Add a Pokemon to your party (Name or ID): ")
-        pokemon_party.append(pokemon_entry)
-        print(pokemon_entry)
+        pokemon_name = input("Add a Pokemon to your party (Name): ")
+        print("\n")
+        pokemon_info = get_pokemon_info(pokemon_name)
+        pokemon_party.append(pokemon_info["name"].capitalize())
+        print(str(pokemon_info["name"].capitalize() + " has joined the party"))
 
     if poke == pokemon_party_size:
-      print("Your party is assembled: ")
-      print(pokemon_party)
+        print("Your party is assembled: ")
+        print('\n'.join(pokemon_party))
     else:
         print("Can't find pokemon in pyDex")
         print("\n")
 
+
 def surprise():
-  print("\n")
-  print("Surprise!")
+    get = requests.get("https://pokeapi.co/api/v2/pokemon/")
+    print(get)
+    # surprise = get_pokemon_info()
+    # print("\n")
+    print("Surprise!")
 
 
 def get_pokemon_info(name):
@@ -59,6 +70,7 @@ def get_pokemon_info(name):
 
     else:
         print("Failed to retrieve data!")
+        exit()
 
 
 
