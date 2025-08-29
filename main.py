@@ -1,11 +1,10 @@
 import requests
-import random
-
-random.random()
 
 # pokemon API base url
 base_url = "https://pokeapi.co/api/v2/"
 
+# pokemon API random url
+random_url = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
 
 def menu():
     print("------------------------")
@@ -29,10 +28,10 @@ def main():
     elif menu_selection == 2:
         party()
     elif menu_selection == 3:
-        surprise()
+        surprise_results()
     else:
         print("Entry is not valid.")
-        return
+        exit()
 
 
 def party():
@@ -51,13 +50,27 @@ def party():
         print("\n")
 
 
-def surprise():
-    get = requests.get("https://pokeapi.co/api/v2/pokemon/")
-    print(get)
-    # surprise = get_pokemon_info()
-    # print("\n")
-    print("Surprise!")
+def surprise(name):
+    rand_url = f"{random_url}/pokemon/{name}"
+    response = requests.get(rand_url)
+    print(response)
 
+    if response.status_code == 200:
+        random_pokemon = response.json()
+        return random_pokemon
+
+    else:
+        print("Something went wrong")
+        return 0
+
+
+def surprise_results():
+    surprise_info = surprise(random_pokemon)
+
+    if surprise_info:
+        print("Surprise!")
+        # print("\n")
+        print(f"Name: {surprise_info["name"].capitalize()}")
 
 def get_pokemon_info(name):
     url = f"{base_url}/pokemon/{name}"
